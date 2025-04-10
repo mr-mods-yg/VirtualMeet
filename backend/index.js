@@ -19,11 +19,11 @@ app.use(cors({
     credentials: true
 }));
 
-  
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.ORIGIN_URL+"/auth/google/callback",
+    callbackURL: process.env.ORIGIN_URL + "/auth/google/callback",
 }, (accessToken, refreshToken, profile, done) => {
     // Todo: Store user info in DB or session
     return done(null, profile);
@@ -41,8 +41,8 @@ passport.deserializeUser((user, done) => {
 
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-app.get("/auth/google/callback", 
-    passport.authenticate("google", { failureRedirect: "/", session: false}),
+app.get("/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/", session: false }),
     async (req, res) => {
         const userData = req.user._json;
         // _json: {
@@ -55,7 +55,7 @@ app.get("/auth/google/callback",
         //     email_verified: true
         //   }
         let user = await User.findOne({ googleId: userData.sub });
-        if(!user){
+        if (!user) {
             // if user does not exists create new user in the database
             user = new User({
                 name: userData.name,
@@ -70,19 +70,21 @@ app.get("/auth/google/callback",
         userData.id = user._id.toString(); // Add the user ID to the userData object
         // console.log(userData);
         const token = jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.cookie("authToken", token, { 
-            httpOnly: true, 
-            secure: process.env.NODE_ENV === 'production', 
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "None",
             maxAge: 3600000 // 1 hour
         });
-        res.redirect(process.env.FRONTEND_URI+"/dashboard"); // Redirect to frontend after login
+        res.redirect(process.env.FRONTEND_URI + "/dashboard"); // Redirect to frontend after login
     }
 );
 
 // Logout Route
 app.get("/auth/logout", (req, res) => {
-    res.clearCookie("authToken", { 
-        httpOnly: true, 
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        sameSite: "None",
         secure: process.env.NODE_ENV === 'production'
     });
     res.json({ message: "Logged out successfully" });
@@ -95,5 +97,5 @@ app.use("/event", require("./routes/event"));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
     await connectDB();
-    console.log("Server running on port "+PORT);
+    console.log("Server running on port " + PORT);
 });
