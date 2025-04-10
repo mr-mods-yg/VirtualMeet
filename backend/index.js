@@ -12,6 +12,7 @@ const User = require("./models/user");
 const app = express();
 let origin = null;
 
+app.set('trust proxy', 1); // trust first proxy
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
