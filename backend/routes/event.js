@@ -3,7 +3,7 @@ const router = express.Router();
 
 const multer = require("multer");
 const verifyToken = require("../middlewares/verifyToken");
-const Event = require("../models/Event");
+const Event = require("../models/event");
 const cloudinary = require("../lib/cloudinary");
 const {getKitToken} = require("../zegocloud/kitToken");
 
