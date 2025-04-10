@@ -74,7 +74,8 @@ app.get("/auth/google/callback",
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: "None",
+            path: "/",
+            sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
             maxAge: 3600000 // 1 hour
         });
         res.redirect(process.env.FRONTEND_URI + "/dashboard"); // Redirect to frontend after login
@@ -85,8 +86,9 @@ app.get("/auth/google/callback",
 app.get("/auth/logout", (req, res) => {
     res.clearCookie("authToken", {
         httpOnly: true,
-        sameSite: "None",
-        secure: process.env.NODE_ENV === 'production'
+        secure: process.env.NODE_ENV === 'production',
+        path: "/",
+        sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax"
     });
     res.json({ message: "Logged out successfully" });
 });
