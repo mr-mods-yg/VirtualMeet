@@ -54,8 +54,8 @@ function HomePage() {
             description={event.description}
             image={event.thumbnail}
             flag={event.type}
-            start={format(start, "Pp")}
-            end={format(end, "Pp")}
+            start={format(start, "PPP p")}
+            end={format(end, "PPP p")}
             isRegistered={isRegistered}
             isEventStarted={isEventStarted}
             meetingID={event.meetingDetails.meetingID}

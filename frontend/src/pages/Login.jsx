@@ -2,21 +2,31 @@ import React, { useEffect } from 'react'
 import axiosInstance from '../lib/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../store/userStore';
+import toast from 'react-hot-toast';
 
 function Login() {
     const navigate = useNavigate();
     const { setInfo } = useUserStore();
     useEffect(() => {
-        axiosInstance.get("/user/me")
-            .then(response => {
-                if (response.status == 200) {
-                    setInfo(response.data.user);
+        const token = localStorage.getItem('token');
+        if(token){
+            axiosInstance.get("/user/me", {
+                headers: {
+                    "Authorization" : "Bearer "+token
+                }
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    toast.success(`Welcome back ${res.data.user.name}!`);
+                    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                    setInfo(res.data.user);
                     navigate("/dashboard");
                 }
             })
-            .catch(() => {
-                console.log("User not logged in!");
+            .catch((err) => {
+                console.log("Error : "+ err.message);
             })
+        }
     }, [setInfo, navigate]);
     const handleGoogleLogin = () => {
         window.location.href = import.meta.env.VITE_BACKEND_URI + "/auth/google"; // Redirect to backend OAuth route

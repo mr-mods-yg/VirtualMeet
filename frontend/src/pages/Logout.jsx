@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import useUserStore from '../store/userStore'
+import { useNavigate } from 'react-router-dom';
 
 function Logout() {
     const { logout } = useUserStore();
-    useEffect(logout, [logout]);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        logout();
+        navigate("/login");
+    }, [logout, navigate]);
     return (
         <div className='flex justify-center items-center h-full'>
             <div className='flex-col text-center'>

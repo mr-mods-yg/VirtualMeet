@@ -12,12 +12,10 @@ const User = require("./models/user");
 const app = express();
 let origin = null;
 
-app.set('trust proxy', 1); // trust first proxy
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: process.env.FRONTEND_URI,
-    credentials: true
+    origin: process.env.FRONTEND_URI
 }));
 
 
@@ -71,28 +69,9 @@ app.get("/auth/google/callback",
         userData.id = user._id.toString(); // Add the user ID to the userData object
         // console.log(userData);
         const token = jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            path: "/",
-            sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax",
-            maxAge: 3600000 // 1 hour
-        });
-        res.redirect(process.env.FRONTEND_URI + "/dashboard"); // Redirect to frontend after login
+        res.redirect(process.env.FRONTEND_URI + "/auth?token="+token); // Redirect to frontend after login
     }
 );
-
-// Logout Route
-app.get("/auth/logout", (req, res) => {
-    res.clearCookie("authToken", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        path: "/",
-        sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax"
-    });
-    res.json({ message: "Logged out successfully" });
-});
-
 // Routes Setup
 app.use("/user", require("./routes/user"));
 app.use("/event", require("./routes/event"));

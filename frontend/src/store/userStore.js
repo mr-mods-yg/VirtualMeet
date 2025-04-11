@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import axiosInstance from "../lib/axiosInstance";
+import axiosInstance from '../lib/axiosInstance';
 // email: "yg292001@gmail.com"
 // email_verified: true
 // family_name: "Garg"
@@ -19,14 +19,9 @@ const useUserStore = create((set) => ({
         set({ info: data, name: data.name, gid: data.sub, id: data.id })
     },
     logout: () => {
-        axiosInstance.get("/auth/logout")
-            .then(() => {
-                set({ name: "", info: {}, gid: "", id: "" });
-                window.location.href = "/";
-            })
-            .catch((error) => {
-                console.error("Logout failed", error);
-            });
+        localStorage.removeItem("token");
+        set({ gid: "", id: "", name: "", info: {} });
+        delete axiosInstance.defaults.headers.common['Authorization'];
     }
 }))
 

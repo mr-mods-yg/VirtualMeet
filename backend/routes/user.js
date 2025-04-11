@@ -4,7 +4,7 @@ const verifyToken = require("../middlewares/verifyToken");
 
 // API to get user data (uses token from cookie)
 router.get("/me", verifyToken, (req, res) => {
-    res.json({ user: req.user });
+    res.status(200).json({ user: req.user });
 });
 
 module.exports = router;
