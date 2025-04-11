@@ -19,15 +19,20 @@ function CreateEvent() {
         // console.log(eventDescription)
         // console.log(eventType)
         // console.log(eventThumbnail);
-        // console.log(startDateTime);
-        // console.log(endDateTime);
+        // console.log(startDateTime)
+        // console.log(endDateTime)
+        const startDateTimeUTC = new Date(startDateTime).toISOString();
+        const endDateTimeUTC = new Date(endDateTime).toISOString();
+        // console.log(startDateTimeUTC);
+        // console.log(endDateTimeUTC);
+
         const formData = new FormData();
         formData.append("eventTitle", eventTitle);
         formData.append("eventDescription", eventDescription);
         formData.append("eventType", eventType);
         formData.append("file", eventThumbnail);
-        formData.append("startDateTime", startDateTime);
-        formData.append("endDateTime", endDateTime);
+        formData.append("startDateTime", startDateTimeUTC);
+        formData.append("endDateTime", endDateTimeUTC);
         toast.promise(
             createEvent(formData),
              {
@@ -40,6 +45,7 @@ function CreateEvent() {
     useEffect(()=>{
         setInterval(()=>{
             setCurrTime(getLocalDateTime())
+
         }, 10000);
     }, [setCurrTime])
 
