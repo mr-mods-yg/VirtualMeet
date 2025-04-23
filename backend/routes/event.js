@@ -86,7 +86,16 @@ router.get("/getAll", async (req, res) => {
     let filter = req.query.filter || "";
     filter = filter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     
-    const events = await Event.find({title: { $regex: filter, $options: "i" }});
+    let events = await Event.find({title: { $regex: filter, $options: "i" }});
+    events = events.filter((event) => {
+      const end = new Date(event.endDateTime);
+      const currTime = new Date();
+      if(currTime > end){
+        return false;
+      }
+      return true;
+    })
+    // console.log(events);
     if(!events){
       return res.status(404).json({ message: "No events found" });
     }
