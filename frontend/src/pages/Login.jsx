@@ -33,7 +33,7 @@ function Login() {
     };
 
     return (
-        <div className='flex justify-center items-center h-full'>
+        <div className='h-[72vh] flex justify-center items-center'>
             <div className='flex-col text-center'>
                 <div className="text-2xl m-5">Login/Register!</div>
                 <button className="btn bg-white text-black border-[#e5e5e5]" onClick={handleGoogleLogin}>

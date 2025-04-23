@@ -37,7 +37,7 @@ function Meeting() {
         );
         setKitToken(generatedToken);
       } catch (err) {
-        toast.error('Failed to fetch meeting token: '+ err.message);
+        toast.error('Failed to fetch meeting token: ' + err.message);
         navigate('/dashboard');
       }
     };
@@ -48,6 +48,7 @@ function Meeting() {
   useEffect(() => {
     if (kitToken && containerRef.current) {
       const zp = ZegoUIKitPrebuilt.create(kitToken);
+      
       zp.joinRoom({
         container: containerRef.current,
         // sharedLinks: [
@@ -59,6 +60,12 @@ function Meeting() {
         scenario: {
           mode: ZegoUIKitPrebuilt.VideoConference,
         },
+        screenSharingConfig: {
+          resolution: "auto"
+        },
+        showRoomDetailsButton: false,
+        layout: "Grid"
+
       });
     }
   }, [kitToken, roomID]);
@@ -67,7 +74,7 @@ function Meeting() {
     <div
       className="myCallContainer"
       ref={containerRef}
-      style={{ width: '100vw', height: '90vh' }}
+      style={{ width: '100vw', height: '90vh'}}
     ></div>
   );
 }

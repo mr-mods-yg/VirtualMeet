@@ -5,6 +5,7 @@ import axiosInstance from '../lib/axiosInstance';
 import { format } from "date-fns";
 import { toast } from 'react-hot-toast';
 import useEventStore from '../store/eventStore';
+import { Search } from "lucide-react";
 function HomePage() {
   const { id, name } = useUserStore();
   const { registerEvent } = useEventStore();
@@ -14,6 +15,11 @@ function HomePage() {
     axiosInstance.get("/event/getAll").then((res) => {
       setEvents(res.data);
     });
+    setInterval(()=>{
+      axiosInstance.get("/event/getAll").then((res) => {
+        setEvents(res.data);
+      });
+    }, 60*1000); // refresh after every minute
   }, [])
 
   let timer;
@@ -26,14 +32,19 @@ function HomePage() {
     }, 1000);
   }
   return (
-    <div>
+    <div className='bg-medium-purple-400'>
       <div className='flex justify-center h-full m-5'>
         <div className='flex-col text-center'>
           <div className="text-3xl mt-10 mb-5">Welcome back {name}!</div>
-          <input type="text" onChange={inputChangeHandler} className="input input-primary input-xl" placeholder='Search Events' />
+
+          <label className="input">
+            <Search color='grey'/>
+            <input type="search" onChange={inputChangeHandler} className='input-lg' required placeholder="Search Events" />
+          </label>
+
+          {/* <input type="text" onChange={inputChangeHandler} className="input input-primary input-xl" placeholder='Search Events' /> */}
         </div>
       </div>
-
       {/* Cards */}
       <div className='flex justify-center space-x-2 md:space-x-3 lg:space-x-4 flex-wrap'>
         {events.map((event) => {
@@ -44,7 +55,7 @@ function HomePage() {
           const currTime = new Date();
 
           let isEventStarted = false;
-          if(currTime>=start && currTime<=end){
+          if (currTime >= start && currTime <= end) {
             isEventStarted = true;
           }
 

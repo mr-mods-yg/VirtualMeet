@@ -1,2 +1,19 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {
+    themes: light --default;
+}
+@theme {
+    --font-poppins: Poppins, sans-serif;
+    --color-medium-purple-50: #f4f2ff;
+    --color-medium-purple-100: #eae8ff;
+    --color-medium-purple-200: #d7d4ff;
+    --color-medium-purple-300: #bbb1ff;
+    --color-medium-purple-400: #9a85ff;
+    --color-medium-purple-500: #8a69ff;
+    --color-medium-purple-600: #6830f7;
+    --color-medium-purple-700: #5a1ee3;
+    --color-medium-purple-800: #4b18bf;
+    --color-medium-purple-900: #3f169c;
+    --color-medium-purple-950: #250b6a;
+}

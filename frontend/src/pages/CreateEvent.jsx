@@ -65,7 +65,7 @@ function CreateEvent() {
         console.log("File Selected : "+null);
     }
     return (
-        <div className='flex justify-center h-full'>
+        <div className='flex justify-center h-full font-poppins'>
             <div className='flex-col text-center'>
                 <div className="text-center p-5">
                     <h1 className="text-2xl font-semibold ">Create your Event</h1>
@@ -74,26 +74,26 @@ function CreateEvent() {
                 <div className="space-y-6">
                     <form onSubmit={onSubmitHandler}>
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Title
                             </div>
                             <input type="text" onChange={(e)=>{
                                 setEventTitle(e.target.value);
-                            }} placeholder="Enter event title" class="input input-secondary" />
+                            }} placeholder="Enter event title" class="input rounded-xl" />
                         </div>
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Description
                             </div>
                             <input type="text" onChange={(e)=>{
                                 setEventDescription(e.target.value);
-                            }} placeholder="Enter event description" class="input input-secondary" />
+                            }} placeholder="Enter event description" class="input rounded-xl" />
                         </div>
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Type
                             </div>
-                            <select defaultValue="Webinar" className="select select-secondary" onChange={(e)=>{
+                            <select defaultValue="Webinar" className="select rounded-xl" onChange={(e)=>{
                                 setEventType(e.target.value)
                             }}>
                                 <option disabled={true}>Select Event Type</option>
@@ -101,10 +101,10 @@ function CreateEvent() {
                             </select>
                         </div>
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Thumbnail
                             </div>
-                            <input type="file" className="file-input file-input-secondary" onChange={imageChangeHandler} accept="image/*" ref={eventThumbnailInputRef}/>
+                            <input type="file" className="file-input rounded-xl" onChange={imageChangeHandler} accept="image/*" ref={eventThumbnailInputRef}/>
                             {eventThumbnail ? <div className='flex'>
                             <img className='h-auto'
                             src={URL.createObjectURL(eventThumbnail)} />
@@ -113,24 +113,24 @@ function CreateEvent() {
                         </div>
                     
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Start Date Time
                             </div>
-                            <input className="input input-secondary" type="datetime-local" onChange={(e)=>
+                            <input className="input rounded-xl" type="datetime-local" onChange={(e)=>
                                 setStartDateTime(e.target.value)
                             } min={currTime}/>
                         </div>
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
-                            <div className="text-sm text-zinc-400 flex items-center gap-2">
+                            <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event End Date Time
                             </div>
-                            <input className="input input-secondary" type="datetime-local" onChange={(e)=>
+                            <input className="input rounded-xl" type="datetime-local" onChange={(e)=>
                                 setEndDateTime(e.target.value)
                             } min={currTime}/>
                         </div>
                         <div className="space-x-5 max-w-screen sm:w-75 mb-3">
-                            <button className="btn btn-secondary" type='none'>Submit</button>
-                            <a className="btn btn-secondary" href='/dashboard'>Cancel</a>
+                            <button className="btn rounded-xl btn-primary p-4 m-2 bg-medium-purple-600" type='none'>Submit</button>
+                            <a className="btn rounded-xl btn-primary p-4 m-2 bg-medium-purple-600" href='/dashboard'>Cancel</a>
                         </div>
                         
                     </form>
