@@ -33,10 +33,17 @@ const EventPage = () => {
     const end = new Date(eventInfo.endDateTime);
     const currTime = new Date();
 
+    let isEventCompleted = false;
     let isEventStarted = false;
+    
     if (currTime >= start && currTime <= end) {
         isEventStarted = true;
     }
+
+    if(currTime>end){
+        isEventCompleted=true;
+    }
+
     const attendees = eventInfo.meetingDetails.attendees;
     return (
         <div className='flex flex-wrap justify-around'>
@@ -50,6 +57,7 @@ const EventPage = () => {
                 start={format(start, "PPP p")}
                 end={format(end, "PPP p")}
                 isEventStarted={isEventStarted}
+                isEventCompleted={isEventCompleted}
             />
             <div className=''>
             <p className='text-bold text-3xl'>Event Attendees</p>

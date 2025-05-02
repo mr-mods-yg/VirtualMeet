@@ -1,5 +1,5 @@
 import React from 'react'
-function EventDetails({ title, description, flag, image, start, end, isEventStarted }) {
+function EventDetails({ title, description, flag, image, start, end, isEventStarted, isEventCompleted }) {
     return (
         <div className="card bg-medium-purple-500 text-white w-9/20 md:w-2/10 card-sm md:card-md shadow-xs m-2 shadow-medium-purple-700">
             <figure>
@@ -17,7 +17,7 @@ function EventDetails({ title, description, flag, image, start, end, isEventStar
                     <div className="p-2 text-bold">starts at: {start}</div>
                     <div className="p-2">ends at : {end}</div>
                 </div>
-                {isEventStarted? "Event is live!" : "Event is not started yet!"}
+                {isEventStarted? "Event is live!" : isEventCompleted ? "Event is already completed!" : "Event is not started yet!"}
 
             </div>
         </div>
