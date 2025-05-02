@@ -5,7 +5,7 @@ const multer = require("multer");
 const verifyToken = require("../middlewares/verifyToken");
 const Event = require("../models/event");
 const cloudinary = require("../lib/cloudinary");
-const {getKitToken} = require("../zegocloud/kitToken");
+const { getKitToken } = require("../zegocloud/kitToken");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -30,13 +30,13 @@ router.post("/create", upload.single("file"), async (req, res) => {
     //   title: { type: String, required: true, trim: true },
     //   description: { type: String, required: true },
     //   thumbnail: { type: String },
-    
+
     //   startDateTime: { type: Date, required: true }, // Start time
     //   endDateTime: { type: Date, required: true },   // End time
-    
+
     //   type: { type: String, enum: ["Webinar", "Seminar", "Workshop"], required: true },
     //   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    
+
     //   meetingDetails: {
     //     meetingID: { type: String, unique: true, required: true },
     //     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // List of attendees
@@ -52,15 +52,15 @@ router.post("/create", upload.single("file"), async (req, res) => {
       const uploadStream = cloudinary.uploader.upload_stream((error, uploadResult) => {
         if (error) return reject(error);
         return resolve(uploadResult);
-        })
-        uploadStream.end(eventThumbnailBuffer);
+      })
+      uploadStream.end(eventThumbnailBuffer);
     });
 
-    const thumbnailUrl =  uploadResult.secure_url;
+    const thumbnailUrl = uploadResult.secure_url;
 
     const event = new Event({
       title: req.body.eventTitle,
-      description : req.body.eventDescription,
+      description: req.body.eventDescription,
       thumbnail: thumbnailUrl,
       startDateTime: req.body.startDateTime,
       endDateTime: req.body.endDateTime,
@@ -73,35 +73,88 @@ router.post("/create", upload.single("file"), async (req, res) => {
     });
 
     await event.save();
-    res.status(201).json({ message: "Event created successfully"});
+    res.status(201).json({ message: "Event created successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+router.post("/eventInfo", async (req, res) => {
+  try {
+    let eventId = req.body.eventId;
+    if (!eventId) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+    const event = await Event.findOne({ _id: eventId }).populate("meetingDetails.attendees", "name email");
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    return res.json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+    
+  }
+})
+
 router.get("/getAll", async (req, res) => {
-  try{
+  try {
     // escape regex
     let filter = req.query.filter || "";
+    let type = req.query.type || null;
     filter = filter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-    
-    let events = await Event.find({title: { $regex: filter, $options: "i" }});
+    let events;
+
+    if(type){
+      type = type.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+      events = await Event.find({ title: { $regex: filter, $options: "i" }, type: type });
+    }
+    else{
+      events = await Event.find({ title: { $regex: filter, $options: "i" } });
+    }
+
     events = events.filter((event) => {
       const end = new Date(event.endDateTime);
       const currTime = new Date();
-      if(currTime > end){
+      if (currTime > end) {
         return false;
       }
       return true;
     })
     // console.log(events);
-    if(!events){
+    if (!events) {
       return res.status(404).json({ message: "No events found" });
     }
     res.status(200).json(events);
   }
-  catch(err){
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+})
+
+router.get("/getMyEvents", async (req, res) => {
+  try {
+    // escape regex
+    const showPastEvents = req.query.showPastEvents || false; // default hide past events
+    let events = await Event.find({ createdBy: req.user.id });
+    if (showPastEvents!="true") {
+      events = events.filter((event) => {
+        const end = new Date(event.endDateTime);
+        const currTime = new Date();
+        if (currTime > end) {
+          return false;
+        }
+        return true;
+      })
+    }
+    if (!events) {
+      return res.status(404).json({ message: "No events found" });
+    }
+    res.status(200).json(events);
+  }
+  catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -132,18 +185,18 @@ router.post("/token", async (req, res) => {
     const userId = req.user.id;
     const event = await Event.findOne({ "meetingDetails.meetingID": meetingID });
 
-    if(!event.meetingDetails.attendees.includes(userId)){
+    if (!event.meetingDetails.attendees.includes(userId)) {
       return res.status(403).json({ message: "User is not registered for the event" });
     }
 
-    if(!event) {
+    if (!event) {
       console.log("Meeting not found");
       return res.status(404).json({ message: "Meeting not found" });
     }
     // console.log(event);
     // console.log(event.createdBy);
     let publishStream = 0;
-    if(event.createdBy.toString() === userId) {
+    if (event.createdBy.toString() === userId) {
       publishStream = 1;
     }
     const token = getKitToken(userId, meetingID, 1, publishStream);

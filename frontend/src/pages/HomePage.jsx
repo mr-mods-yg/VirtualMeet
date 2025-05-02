@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { toast } from 'react-hot-toast';
 import useEventStore from '../store/eventStore';
 import { Search } from "lucide-react";
+
 function HomePage() {
   const { id, name } = useUserStore();
   const { registerEvent } = useEventStore();
@@ -15,11 +16,11 @@ function HomePage() {
     axiosInstance.get("/event/getAll").then((res) => {
       setEvents(res.data);
     });
-    setInterval(()=>{
+    setInterval(() => {
       axiosInstance.get("/event/getAll").then((res) => {
         setEvents(res.data);
       });
-    }, 60*1000); // refresh after every minute
+    }, 60 * 1000); // refresh after every minute
   }, [])
 
   let timer;
@@ -31,6 +32,20 @@ function HomePage() {
       });
     }, 1000);
   }
+  
+  const onFilterChangeHandler= (e)=>{
+    if(e.target.value=='×'){
+      axiosInstance.get(`/event/getAll`).then((res) => {
+        setEvents(res.data);
+      });
+    }
+    else{
+      let filteredEvents = events.filter((event)=>event.type==e.target.value);
+      setEvents(filteredEvents);
+    }
+    
+  }
+  
   return (
     <div className='bg-medium-purple-400'>
       <div className='flex justify-center h-full m-5'>
@@ -38,10 +53,19 @@ function HomePage() {
           <div className="text-3xl mt-10 mb-5">Welcome back {name}!</div>
 
           <label className="input">
-            <Search color='grey'/>
+            <Search color='grey' />
             <input type="search" onChange={inputChangeHandler} className='input-lg' required placeholder="Search Events" />
           </label>
 
+          <div className='bg-medium-purple-300 rounded-xl p-3 mt-3'>
+            <p className='p-1'>Filter By</p>
+            <form className="filter flex justify-center" onClick={onFilterChangeHandler}>
+              <input className="btn btn-square" type="reset" value="×" />
+              <input className="btn" type="radio" name="frameworks" aria-label="Workshop" value={"Workshop"} />
+              <input className="btn" type="radio" name="frameworks" aria-label="Seminar" value={"Seminar"}/>
+              <input className="btn" type="radio" name="frameworks" aria-label="Webinar" value={"Webinar"}/>
+            </form>
+          </div>
           {/* <input type="text" onChange={inputChangeHandler} className="input input-primary input-xl" placeholder='Search Events' /> */}
         </div>
       </div>

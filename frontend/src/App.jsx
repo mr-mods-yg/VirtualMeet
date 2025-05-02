@@ -11,6 +11,8 @@ import CreateEvent from "./pages/CreateEvent";
 import { Toaster } from "react-hot-toast";
 import Meeting from "./pages/Meeting";
 import AuthHandler from "./pages/AuthHandler";
+import MyEvents from "./pages/MyEvents";
+import EventPage from "./pages/EventPage";
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/event/create" element={<ProtectedRoute><CreateEvent /></ProtectedRoute>} />
+        <Route path="/event/me" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
+        <Route path="/event/:id" element={<ProtectedRoute><EventPage /></ProtectedRoute>} />
         <Route path="/meeting" element={<ProtectedRoute><Meeting /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>

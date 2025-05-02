@@ -1,0 +1,62 @@
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom'
+import axiosInstance from '../lib/axiosInstance';
+import { format } from 'date-fns';
+import EventDetails from '../components/EventDetails';
+
+const EventPage = () => {
+    let params = useParams()
+    const navigate = useNavigate();
+    const eventId = params.id;
+    const [eventInfo, setEventInfo] = useState();
+
+    useEffect(() => {
+        if (!eventId) {
+            toast.error("event id not found!");
+            navigate("/dashboard");
+        }
+
+        axiosInstance.post("/event/eventInfo", {
+            eventId
+        }).then((res) => {
+            setEventInfo(res.data)
+        })
+
+    }, [navigate, eventId])
+
+    if (!eventInfo) {
+        return <>Loading..</>
+    }
+
+    const start = new Date(eventInfo.startDateTime);
+    const end = new Date(eventInfo.endDateTime);
+    const currTime = new Date();
+
+    let isEventStarted = false;
+    if (currTime >= start && currTime <= end) {
+        isEventStarted = true;
+    }
+    const attendees = eventInfo.meetingDetails.attendees;
+    return (
+        <div className='flex flex-wrap justify-around'>
+            {/* {JSON.stringify(eventInfo)} */}
+            <EventDetails
+                key={eventInfo._id}
+                title={eventInfo.title}
+                description={eventInfo.description}
+                image={eventInfo.thumbnail}
+                flag={eventInfo.type}
+                start={format(start, "PPP p")}
+                end={format(end, "PPP p")}
+                isEventStarted={isEventStarted}
+            />
+            <div className=''>
+            <p className='text-bold text-3xl'>Event Attendees</p>
+            {attendees.map((attendee)=><p key={attendee._id}>{attendee.name} {attendee.email}</p>)}
+            </div>
+        </div>
+    )
+}
+
+export default EventPage

@@ -10,9 +10,14 @@ function Navbar() {
       <div className="flex-1">
         <a className="btn btn-ghost text-xl font-thin" href={'/'}>Virtual <span className='text-medium-purple-700'>Meet</span></a>
       </div>
-      {id === "" ? <a className='btn btn-ghost text-lg gap-1.5' href='/login'><LogIn/>Login</a> :
+      {id === "" ? <a className='btn btn-ghost text-lg gap-1.5' href='/login'><LogIn />Login</a> :
         <div className=" dropdown dropdown-end">
-          {window.location.pathname == '/dashboard' ? <a className=' btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/event/create'>Create Event</a> : <a className=' btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/dashboard'>Dashboard</a>}
+          {window.location.pathname == '/dashboard' ?
+            <a className=' btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/event/create'>Create Event</a>
+            : <ul className="menu menu-horizontal py-1">
+              <li><a className='text-thin text-lg' href='/dashboard'>Dashboard</a></li>
+            </ul>
+          }
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar w-13">
             <div className="rounded-full">
               <img
@@ -20,7 +25,9 @@ function Navbar() {
                   width: 47
                 }}
                 src={info?.picture || avatarURL}
-                alt="avatar" />
+                alt="avatar"
+                referrerPolicy="no-referrer"
+              />
             </div>
           </div>
           <ul
@@ -28,6 +35,7 @@ function Navbar() {
             className="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 p-2 shadow">
             <li><a className='text-primary' href='/profile'>Profile</a></li>
             <li><a className='text-primary' href='/dashboard'>Dashboard</a></li>
+            <li><a className='text-primary' href='/event/me'>My Events</a></li>
             <li><a className='text-primary' href='/logout'>Logout <LogOut /></a></li>
           </ul>
         </div>

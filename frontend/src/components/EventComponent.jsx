@@ -1,5 +1,5 @@
 import React from 'react'
-function EventComponent({ title, description, flag, image, start, end, isRegistered, submitHandler, isEventStarted, meetingID }) {
+function EventComponent({ id, title, description, flag, image, start, end, isRegistered, submitHandler, isEventStarted, meetingID, showAttendeesButton }) {
     return (
         <div className="card bg-medium-purple-500 text-white w-9/20 md:w-2/10 card-sm md:card-md shadow-xs m-2 shadow-medium-purple-700">
             <figure>
@@ -30,6 +30,9 @@ function EventComponent({ title, description, flag, image, start, end, isRegiste
                         <button className="btn btn-disabled rounded-lg text-medium-purple-300" type="button">Registered</button>
                     </>
                 }
+                {showAttendeesButton ? 
+                <a className="btn btn-primary p-4 m-2 rounded-lg bg-medium-purple-600" href={"/event/"+id}>Show Details</a> 
+                : <></>}
 
             </div>
         </div>
