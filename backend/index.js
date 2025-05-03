@@ -68,7 +68,7 @@ app.get("/auth/google/callback",
         }
         userData.id = user._id.toString(); // Add the user ID to the userData object
         // console.log(userData);
-        const token = jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "12h" });
         res.redirect(process.env.FRONTEND_URI + "/auth?token="+token); // Redirect to frontend after login
     }
 );
