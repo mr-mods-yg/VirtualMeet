@@ -2,6 +2,7 @@ import { Mail, Trash2, User } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { getLocalDateTime } from '../lib/localdatetime';
 import useEventStore from "../store/eventStore";
+import { toast } from 'react-hot-toast';
 
 function CreateEvent() {
     const [eventTitle, setEventTitle] = useState("");
@@ -21,6 +22,10 @@ function CreateEvent() {
         // console.log(eventThumbnail);
         // console.log(startDateTime)
         // console.log(endDateTime)
+        if(!eventTitle || !eventType || !eventThumbnail || !startDateTime || !endDateTime) {   
+            toast.error("Please fill all the required fields!")
+            return;
+        }
         const startDateTimeUTC = new Date(startDateTime).toISOString();
         const endDateTimeUTC = new Date(endDateTime).toISOString();
         // console.log(startDateTimeUTC);
@@ -91,6 +96,7 @@ function CreateEvent() {
                         <div className="space-y-1.5 max-w-screen sm:w-75 mb-3">
                             <div className="text-md text-medium-purple-950 flex items-center gap-2">
                                 Event Description
+                                <span className='text-medium-purple-900'>(Optional)</span>
                             </div>
                             <input type="text" onChange={(e) => {
                                 setEventDescription(e.target.value);
