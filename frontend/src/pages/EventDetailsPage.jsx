@@ -88,7 +88,7 @@ const EventDetailsPage = () => {
             />
             <div className='m-5'>
                 <p className='text-bold text-2xl p-2 outline-1 m-2 rounded-2xl'> Event Host : <br />{host.name} </p>
-                <p className='text-bold text-2xl p-2 outline-1 m-2 rounded-2xl'> Event Attendees : <br />{attendees.map((attendee)=>attendee.name)} </p>
+                <p className='text-bold text-2xl p-2 outline-1 m-2 rounded-2xl'> Event Attendees : <br /> <ul>{attendees.map((attendee)=> <li key={attendee._id}>{attendee.name}</li>)}</ul> </p>
             </div>
         </div>
     )
