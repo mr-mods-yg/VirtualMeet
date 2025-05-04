@@ -17,3 +17,7 @@
     --color-medium-purple-900: #3f169c;
     --color-medium-purple-950: #250b6a;
 }
+
+body{
+    background-color: #9a85ff;
+}
