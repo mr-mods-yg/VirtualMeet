@@ -1,7 +1,12 @@
 import React from 'react'
 function EventComponent({ id, title, description, flag, image, start, end, isRegistered, submitHandler, isEventStarted, meetingID, showAttendeesButton }) {
     return (
-        <div className="card bg-medium-purple-500 text-white w-9/20 md:w-2/10 card-sm md:card-md shadow-xs m-2 shadow-medium-purple-700">
+        <div className="card bg-medium-purple-500 text-white w-9/20 md:w-2/10 card-sm md:card-md shadow-xs m-2 shadow-medium-purple-700 hover:cursor-p
+        ointer hover:scale-105 transition-transform duration-200 ease-in-out hover:cursor-pointer"
+            onClick={() => {
+                window.location.href = "/event/"+id;
+            }}
+        >
             <figure>
                 <img
                     className='w-full h-35 sm:h-40 md:h-40 lg:h-50'
@@ -12,10 +17,10 @@ function EventComponent({ id, title, description, flag, image, start, end, isReg
                     {title}
                     <div className="badge bg-medium-purple-200">{flag}</div>
                 </h2>
-                <p>{description}</p>
-                <div className="card-actions justify-center">
-                    <div className="p-2 text-bold">starts at: {start}</div>
-                    <div className="p-2">ends at : {end}</div>
+                <p>{description.substring(1,38)+"..."}</p>
+                <div className="p-2 card-actions justify-center italic">
+                    <div className="">starts at: {start}</div>
+                    <div className="">ends at : {end}</div>
                 </div>
                 {!isRegistered ?
                     <>
@@ -31,7 +36,7 @@ function EventComponent({ id, title, description, flag, image, start, end, isReg
                     </>
                 }
                 {showAttendeesButton ? 
-                <a className="btn btn-primary p-4 m-2 rounded-lg bg-medium-purple-600" href={"/event/"+id}>Show Details</a> 
+                <a className="btn btn-primary p-4 m-2 rounded-lg bg-medium-purple-600" href={"/event/me/"+id}>Show Details</a> 
                 : <></>}
 
             </div>

@@ -3,9 +3,14 @@ import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../lib/axiosInstance';
 import { format } from 'date-fns';
+import useEventStore from '../store/eventStore';
+import useUserStore from '../store/userStore';
 import EventDetails from '../components/EventDetails';
 
-const EventPage = () => {
+const EventDetailsPage = () => {
+    const { registerEvent } = useEventStore();
+    const { id } = useUserStore();
+
     let params = useParams()
     const navigate = useNavigate();
     const eventId = params.id;
@@ -28,23 +33,26 @@ const EventPage = () => {
     if (!eventInfo) {
         return <>Loading..</>
     }
-
+    console.log(eventInfo);
     const start = new Date(eventInfo.startDateTime);
     const end = new Date(eventInfo.endDateTime);
     const currTime = new Date();
 
     let isEventCompleted = false;
     let isEventStarted = false;
-    
+
     if (currTime >= start && currTime <= end) {
         isEventStarted = true;
     }
 
-    if(currTime>end){
-        isEventCompleted=true;
+    if (currTime > end) {
+        isEventCompleted = true;
     }
 
     const attendees = eventInfo.meetingDetails.attendees;
+    console.log(attendees);
+    const isRegistered = (attendees.find((event)=> event._id==id)) ? true : false;
+    const host = attendees.find((attendee)=>attendee._id==eventInfo.createdBy);
     return (
         <div className='flex flex-wrap justify-around'>
             {/* {JSON.stringify(eventInfo)} */}
@@ -58,13 +66,33 @@ const EventPage = () => {
                 end={format(end, "PPP p")}
                 isEventStarted={isEventStarted}
                 isEventCompleted={isEventCompleted}
+                isRegistered={isRegistered}
+                meetingID={eventInfo.meetingDetails.meetingID}
+                submitHandler={async (e) => {
+                    e.preventDefault();
+                    await toast.promise(
+                      registerEvent(eventInfo._id),
+                      {
+                        loading: 'Registering for the event...',
+                        success: <b>Succesfully Registered!</b>,
+                        error: <b>Could not registered right now!</b>,
+                      }
+                    );
+                    axiosInstance.post("/event/eventInfo", {
+                        eventId
+                    }).then((res) => {
+                        setEventInfo(res.data)
+                    })
+                  }
+                }
             />
-            <div className=''>
-            <p className='text-bold text-3xl'>Event Attendees</p>
-            {attendees.map((attendee)=><p key={attendee._id}>{attendee.name} {attendee.email}</p>)}
+            <div className='m-5'>
+                <p className='text-bold text-2xl p-2 outline-1 m-2 rounded-2xl'> Event Host : <br />{host.name} </p>
+                <p className='text-bold text-2xl p-2 outline-1 m-2 rounded-2xl'> Event Attendees : <br />{attendees.map((attendee)=>attendee.name)} </p>
             </div>
         </div>
     )
 }
 
-export default EventPage
+
+export default EventDetailsPage
