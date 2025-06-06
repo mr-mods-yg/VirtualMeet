@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <div className="navbar bg-medium-purple-400 shadow-sm font-poppins">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl font-thin" href={'/'}>Virtual <span className='text-medium-purple-700'>Meet</span></a>
+        <a className="btn btn-ghost text-xl font-regular gap-0" href={id === "" ? '/' : "/dashboard"}>Virtual <span className='text-medium-purple-700'>Meet</span></a>
       </div>
       {id === "" ? <a className='btn btn-ghost text-lg gap-1.5' href='/login'><LogIn />Login</a> :
         <div className=" dropdown dropdown-end">

@@ -15,7 +15,7 @@ const useUserStore = create((set) => ({
     setName: (name) => set({ name }),
     info: {},
     setInfo: (data) => {
-        console.log(data);
+        // console.log(data);
         set({ info: data, name: data.name, gid: data.sub, id: data.id })
     },
     logout: () => {

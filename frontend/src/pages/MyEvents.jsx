@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import axiosInstance from '../lib/axiosInstance';
 import useEventStore from '../store/eventStore';
 import EventComponent from '../components/EventComponent';
+import Footer from '../components/Footer';
 
 function MyEvents() {
     const { id, name } = useUserStore();
@@ -105,6 +106,7 @@ function MyEvents() {
           flag={"hello world"}/> */}
 
             </div>
+            <Footer/>
         </div>
     )
 }

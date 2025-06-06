@@ -20,8 +20,8 @@ function CreateEvent() {
         // console.log(eventDescription)
         // console.log(eventType)
         // console.log(eventThumbnail);
-        // console.log(startDateTime)
-        // console.log(endDateTime)
+        console.log(startDateTime)
+        console.log(endDateTime)
         if(!eventTitle || !eventType || !eventThumbnail || !startDateTime || !endDateTime) {   
             toast.error("Please fill all the required fields!")
             return;

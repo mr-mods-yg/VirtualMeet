@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { toast } from 'react-hot-toast';
 import useEventStore from '../store/eventStore';
 import { Search } from "lucide-react";
+import Footer from '../components/Footer';
 
 function HomePage() {
   const { id, name } = useUserStore();
@@ -117,6 +118,7 @@ function HomePage() {
           flag={"hello world"}/> */}
 
       </div>
+      <Footer/>
     </div>
   )
 }

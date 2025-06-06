@@ -14,6 +14,7 @@ import AuthHandler from "./pages/AuthHandler";
 import MyEvents from "./pages/MyEvents";
 import MyEventPage from "./pages/MyEventPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
+import EditDetailsPage from "./pages/EditDetailsPage";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/event/:id" element={<ProtectedRoute><EventDetailsPage /></ProtectedRoute>} />
         <Route path="/event/me" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
         <Route path="/event/me/:id" element={<ProtectedRoute><MyEventPage /></ProtectedRoute>} />
+        <Route path="/event/edit/:id" element={<ProtectedRoute><EditDetailsPage /></ProtectedRoute>} />
         <Route path="/meeting" element={<ProtectedRoute><Meeting /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>

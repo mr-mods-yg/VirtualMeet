@@ -94,7 +94,7 @@ router.post("/eventInfo", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
-    
+
   }
 })
 
@@ -106,11 +106,11 @@ router.get("/getAll", async (req, res) => {
     filter = filter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     let events;
 
-    if(type){
+    if (type) {
       type = type.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
       events = await Event.find({ title: { $regex: filter, $options: "i" }, type: type });
     }
-    else{
+    else {
       events = await Event.find({ title: { $regex: filter, $options: "i" } });
     }
 
@@ -139,7 +139,7 @@ router.get("/getMyEvents", async (req, res) => {
     // escape regex
     const showPastEvents = req.query.showPastEvents || false; // default hide past events
     let events = await Event.find({ createdBy: req.user.id });
-    if (showPastEvents!="true") {
+    if (showPastEvents != "true") {
       events = events.filter((event) => {
         const end = new Date(event.endDateTime);
         const currTime = new Date();
@@ -207,4 +207,55 @@ router.post("/token", async (req, res) => {
   }
 })
 
+router.put("/update", upload.single("file"), async (req, res) => {
+  try {
+    const { eventId, eventTitle, eventDescription, startDateTime, endDateTime, eventType } = req.body;
+    const updatedData = {};
+    if (!eventId) {
+      res.status(400).json({ message: "Event ID is required" });
+      return;
+    }
+    if (eventTitle) updatedData.title = eventTitle;
+    if (eventDescription) updatedData.description = eventDescription;
+    if (startDateTime) updatedData.startDateTime = startDateTime;
+    if (endDateTime) updatedData.endDateTime = endDateTime;
+    if (eventType) updatedData.type = eventType;
+
+    if (req.file) {
+      const eventThumbnailBuffer = req.file.buffer;
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream((error, uploadResult) => {
+          if (error) return reject(error);
+          return resolve(uploadResult);
+        });
+        uploadStream.end(eventThumbnailBuffer);
+      });
+      updatedData.thumbnail = uploadResult.secure_url;
+    }
+
+    const event = await Event.findByIdAndUpdate(eventId, updatedData, { new: true });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(200).json({ message: "Event updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.delete("/delete", async (req, res) => {
+  const { eventId } = req.body;
+  if (!eventId) {
+    res.status(400).json({ message: "Event ID is required" });
+    return;
+  }
+  try {
+    await Event.findByIdAndDelete(eventId);
+    res.status(200).json({ message: "Event deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+})
 module.exports = router;
