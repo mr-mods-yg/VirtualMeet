@@ -13,7 +13,6 @@ function HomePage() {
     const { registerEvent } = useEventStore();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
         axiosInstance.get("/event/getAll").then((res) => {
             setEvents(res.data);
@@ -52,7 +51,7 @@ function HomePage() {
     };
 
     return (
-        <div className="bg-medium-purple-400">
+        <div className="bg-medium-purple-400 flex flex-col min-h-screen">
             <div className="flex justify-center h-full m-5">
                 <div className="flex-col text-center">
                     <div className="text-3xl mt-10 mb-5">

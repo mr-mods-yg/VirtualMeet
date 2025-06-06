@@ -49,7 +49,7 @@ function MyEvents() {
         }
     };
     return (
-        <div className="bg-medium-purple-400">
+        <div className="bg-medium-purple-400 flex flex-col min-h-screen">
             <div className="flex justify-center h-full m-5">
                 <div className="flex-col text-center">
                     <div className="text-3xl mt-10 mb-5">
@@ -111,7 +111,6 @@ function MyEvents() {
                 ) : (
                     ""
                 )}
-
                 {events.map((event) => {
                     const attendees = event.meetingDetails.attendees;
                     const isRegistered = attendees.includes(id) ? true : false;
