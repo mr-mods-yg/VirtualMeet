@@ -144,6 +144,7 @@ function HomePage() {
                             meetingID={event.meetingDetails.meetingID}
                             submitHandler={async (e) => {
                                 e.preventDefault();
+                                e.stopPropagation();
                                 await toast.promise(registerEvent(event._id), {
                                     loading: "Registering for the event...",
                                     success: <b>Succesfully Registered!</b>,

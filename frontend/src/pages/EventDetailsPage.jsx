@@ -34,8 +34,7 @@ const EventDetailsPage = () => {
     const currTime = new Date();
 
     const isEventStarted = currTime >= start && currTime <= end;
-    // const isEventCompleted = currTime > end;
-    const isEventCompleted = true;
+    const isEventCompleted = currTime > end;
 
     const attendees = eventInfo.meetingDetails.attendees;
     const isRegistered = attendees.some(att => att._id === id);
