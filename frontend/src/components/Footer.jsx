@@ -1,7 +1,6 @@
 function Footer(){
-  return (<footer className="mt-auto footer sm:footer-horizontal bg-medium-purple-700 text-neutral-content p-10">
+  return (<footer className="mt-5 footer sm:footer-horizontal bg-medium-purple-700 text-neutral-content p-10">
   <aside>
-    
     <p>
       VirtualMeet
       <br />
