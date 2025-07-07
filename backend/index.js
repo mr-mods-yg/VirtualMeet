@@ -44,15 +44,6 @@ app.get("/auth/google/callback",
     passport.authenticate("google", { failureRedirect: "/", session: false }),
     async (req, res) => {
         const userData = req.user._json;
-        // _json: {
-        //     sub: '101076041466164809210',
-        //     name: 'Yash Garg',
-        //     given_name: 'Yash',
-        //     family_name: 'Garg',
-        //     picture: 'https://lh3.googleusercontent.com/a/ACg8ocImy4jM3zNTztKxHGvRcEFfRwkkOcxC3lJjjtQ0Y9NeS2oiW7QN=s96-c',
-        //     email: 'yg292001@gmail.com',
-        //     email_verified: true
-        //   }
         let user = await User.findOne({ googleId: userData.sub });
         if (!user) {
             // if user does not exists create new user in the database
