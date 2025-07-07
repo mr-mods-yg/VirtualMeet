@@ -13,9 +13,9 @@ function Navbar() {
       {id === "" ? <a className='btn btn-ghost text-lg gap-1.5' href='/login'><LogIn />Login</a> :
         <div className=" dropdown dropdown-end">
           {window.location.pathname == '/dashboard' ?
-            <a className=' btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/event/create'>Create Event</a>
+            <a className='btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/event/create'>Create Event</a>
             : <ul className="menu menu-horizontal py-1">
-              <li><a className='text-thin text-lg' href='/dashboard'>Dashboard</a></li>
+              <li><a className='btn btn-primary p-4 m-2 text-thin rounded-4xl bg-medium-purple-600' href='/dashboard'>Dashboard</a></li>
             </ul>
           }
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar w-13">
