@@ -1,6 +1,6 @@
 
 # Virtual Meet
-Virtual Meet is a virtual event management application in which user can create and attend thier virtual events 
+Virtual Meet is a virtual event management application in which user can create, attend and manage thier virtual events 
 ## Features
 
 - **User Authentication** 
